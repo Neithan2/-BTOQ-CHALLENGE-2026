@@ -17,7 +17,7 @@ export const TORNEO_CONFIG = {
   fechaFin: new Date("2026-01-29T00:00:00-03:00").getTime(),
 
   textos: {
-    antes: "El TORNEO EMPIEZA EN",
+    antes: "EL TORNEO EMPIEZA EN",
     terminado: "EL TORNEO HA FINALIZADO, MUCHAS GRACIAS POR PARTICIPAR",
     ultimoDia: "ÚLTIMO DÍA DEL TORNEO",
   },

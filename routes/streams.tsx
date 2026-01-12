@@ -11,6 +11,7 @@ export default function StreamsPage(_props: PageProps) {
     <>
       <Head>
         <title>BTOQ | Streams</title>
+        <meta name="description" content="BTOQ CHALLENGE 2026 Streams de los participantes" />
       </Head>
 
       <div className="relative flex min-h-[80vh] items-center justify-center">

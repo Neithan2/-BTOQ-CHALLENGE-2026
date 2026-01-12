@@ -41,7 +41,7 @@ export default function AboutSection() {
         </div>
       </section>
 
-      {/* SEPARADOR */}
+
       <div className="w-[85%] h-px bg-linear-to-r from-transparent via-Blanco/40 to-transparent mt-12 md:mt-24 mb-10" />
     </div>
   );

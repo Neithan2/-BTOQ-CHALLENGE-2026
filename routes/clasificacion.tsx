@@ -1,6 +1,6 @@
 // routes/clasificacion.tsx
 import { Head } from "fresh/runtime";
-import { PageProps } from "fresh"; // Cambiado a "fresh" para evitar errores de resolución
+import { PageProps } from "fresh";
 import { TORNEO_CONFIG } from "@/utils/config.ts";
 import Gate from "@/components/Gate.tsx";
 
@@ -12,10 +12,7 @@ export default function Clasificacion(_props: PageProps) {
     <>
       <Head>
         <title>BTOQ | Clasificación</title>
-        <meta
-          name="description"
-          content="Consulta la tabla de posiciones del BTOQ 2026."
-        />
+        <meta name="description" content="BTOQ CHALLENGE 2026 Tabla de posiciones" />
       </Head>
 
       <div className="relative flex min-h-[80vh] items-center justify-center">

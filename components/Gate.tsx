@@ -36,7 +36,7 @@ export default function Gate({ type }: { type: "clasificacion" | "showmatch" | "
   return (
     <Hero isGate>
       <div className={`
-        select-none [user-drag:none] [-webkit-user-drag:none]
+        select-none
         bg-Azul/50 border-Dorado/30 animate-fade-in group relative
         w-[90vw] md:max-w-[42vw] overflow-hidden rounded-[6vw] md:rounded-[1.4vw]
         border-[0.5vw] md:border-[0.15vw] p-[10vw] md:p-[2.8vw] text-center backdrop-blur-xl

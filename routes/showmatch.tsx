@@ -11,6 +11,7 @@ export default function Showmatch(_props: PageProps) {
     <>
       <Head>
         <title>BTOQ | Showmatch</title>
+        <meta name="description" content="BTOQ CHALLENGE 2026 Showmatch" />
       </Head>
 
       <div className="relative flex min-h-[80vh] items-center justify-center">

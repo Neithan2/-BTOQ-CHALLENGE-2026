@@ -14,7 +14,7 @@ interface PrizeCardProps {
   footerText?: string; isSpecial?: boolean;
 }
 
-// --- DATOS CONSTANTES (Fuera del componente para optimizar RAM en Deno) ---
+// --- DATOS CONSTANTES ---
 const PREMIOS_DATA = TORNEO_CONFIG.premios as readonly ConfigPremio[];
 
 const HEAVY = { textShadow: "0.01vw 0px 0px currentColor, -0.01vw 0px 0px currentColor" };

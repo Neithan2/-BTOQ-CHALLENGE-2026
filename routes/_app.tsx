@@ -1,5 +1,6 @@
 // routes/_app.tsx
-import { define } from "../utils.ts";
+import { define } from "@/utils.ts";
+import { asset } from "fresh/runtime"
 
 export default define.page(function App({ Component }) {
   return (
@@ -7,8 +8,12 @@ export default define.page(function App({ Component }) {
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-        {/* PRELOAD DE FUENTES: Soluciona el retraso de LCP y errores de TS */}
+        <link
+          rel="preload"
+          href={asset("/img/BTO.webp")}
+          as="image"
+          fetchpriority="high"
+            />
         <link
           rel="preload"
           href="/fonts/Gotham-Ultra.woff2"
@@ -30,6 +35,7 @@ export default define.page(function App({ Component }) {
           type="font/woff2"
           crossOrigin="anonymous"
         />
+
         <link f-permanent rel="stylesheet" href="/styles.css" />
         <link f-permanent rel="icon" type="image/x-icon" href="/favicon.ico" />
         <title>BTOQ</title>

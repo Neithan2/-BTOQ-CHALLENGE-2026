@@ -91,7 +91,7 @@ export default function Timer() {
 
   return (
     <div className={containerClasses}>
-      <div className="select-none [user-drag:none] [-webkit-user-drag:none]
+      <div className="select-none
       flex flex-col items-center justify-center w-full scale-[78%] sm:scale-90 md:scale-110 origin-center">
         <h3 className="gothamU text-Azul mb-2 text-center font-black tracking-tight text-[4.5vw] md:text-[2.9vw]">
           {time.labelDia}

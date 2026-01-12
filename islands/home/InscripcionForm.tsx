@@ -148,7 +148,7 @@ export default function InscripcionForm({ isOpen, onClose }: { isOpen: boolean; 
     <Modal maxWidth="max-w-[95vw] md:max-w-[40vw]" isOpen={isOpen} onClose={onClose}>
       <form onSubmit={handleSubmit} className="bg-Azul relative w-full max-h-[90vh] overflow-y-auto
       md:overflow-hidden rounded-xl shadow-2xl">
-        <img src="/img/FormHeader.webp" alt="Header" className="border-Dorado/30 h-[12vh] md:h-[20vh]
+        <img src="/img/FormHeader.webp" alt="Header" className="select-none pointer-events-none border-Dorado/30 h-[12vh] md:h-[20vh]
         w-full border-b object-cover" />
 
         <div className="flex flex-col gap-[2vh] p-[6vw] md:p-[2.5vw]">
@@ -207,9 +207,8 @@ export default function InscripcionForm({ isOpen, onClose }: { isOpen: boolean; 
               onInput={handleInput}
               className={getInputCls("twitch")} />
 
-              {/* IMAGEN DE FOOTER RESTAURADA */}
               <img src="/img/FormFooter.webp" alt="Decoración"
-              className="hidden md:block border-Blanco/5 mt-[2vh] h-[12vh] w-full rounded-[1vw]
+              className="select-none pointer-events-none hidden md:block border-Blanco/5 mt-[2vh] h-[12vh] w-full rounded-[1vw]
               border object-cover opacity-80" />
 
               <div className="mt-[1vh] grid grid-cols-1 md:grid-cols-2 gap-[2vh] md:gap-[1.5vw]
