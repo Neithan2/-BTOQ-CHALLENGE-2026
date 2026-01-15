@@ -14,8 +14,7 @@ export default define.page(function Home() {
         <link rel="prefetch" href="/img/FormHeader.webp" as="image" />
         <link rel="prefetch" href="/img/FormFooter.webp" as="image" />
       </Head>
-
-      <Hero />
+      <Hero showDecor />
       <AboutSection />
       <PrizesSection />
     </>

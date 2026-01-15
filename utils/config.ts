@@ -14,7 +14,7 @@ export interface Premio {
 }
 export const TORNEO_CONFIG = {
   fechaInicio: new Date("2026-01-15T20:00:00-03:00").getTime(),
-  fechaFin: new Date("2026-01-29T00:00:00-03:00").getTime(),
+  fechaFin: new Date("2026-01-30T00:00:00-03:00").getTime(),
 
   textos: {
     antes: "EL TORNEO EMPIEZA EN",
