@@ -8,6 +8,7 @@ export interface Jugador {
     invocador: string;
     tag: string;
     rol: string;
+    rols: string;
     region: string;
     canal: string;
   };
