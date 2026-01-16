@@ -1,6 +1,6 @@
 // components/tablas/PlayerRow.tsx
 import { memo } from "preact/compat";
-import { useState } from "preact/hooks"; 
+import { useState } from "preact/hooks";
 import { Jugador } from "@/utils/datos.ts";
 import {
   TRADUCIR_RANGO,
@@ -69,9 +69,28 @@ export const PlayerRow = memo(({ p, index }: { p: Jugador; index: number }) => {
         </div>
       </td>
 
-      {/* 4. ROL */}
+        {/* 4. ROL */}
       <td className="w-[4vw] text-center">
-        <img src={`/img/${p.base.rol.toUpperCase()}.svg`} className="mx-auto h-[1.4vw] brightness-0 invert opacity-60 group-hover/row:opacity-100 transition-opacity" alt={p.base.rol} />
+        <div className="flex items-center justify-center gap-[0.4vw]">
+          {/* Rol Primario */}
+          <img
+            src={`/img/${p.base.rol.toUpperCase()}.svg`}
+            className="h-[1.4vw] brightness-0 invert opacity-60 group-hover/row:opacity-100 transition-opacity"
+            alt={p.base.rol}
+          />
+
+          {/* Línea Separadora y Rol Secundario (solo si existe rols) */}
+          {p.base.rols && (
+            <>
+              <div className="w-[1px] h-[1.2vw] bg-Blanco/20 group-hover/row:bg-Dorado/40 transition-colors" />
+              <img
+                src={`/img/${p.base.rols.toUpperCase()}.svg`}
+                className="h-[1vw] brightness-0 invert opacity-30 group-hover/row:opacity-60 transition-opacity"
+                alt={p.base.rols}
+              />
+            </>
+          )}
+        </div>
       </td>
 
       {/* 5. ESTADO */}
