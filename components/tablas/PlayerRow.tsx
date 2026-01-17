@@ -82,7 +82,7 @@ export const PlayerRow = memo(({ p, index }: { p: Jugador; index: number }) => {
           {/* Línea Separadora y Rol Secundario (solo si existe rols) */}
           {p.base.rols && (
             <>
-              <div className="w-[1px] h-[1.2vw] bg-Blanco/20 group-hover/row:bg-Dorado/40 transition-colors" />
+              <div className="w-px h-[1.2vw] bg-Blanco/20 group-hover/row:bg-Dorado/40 transition-colors" />
               <img
                 src={`/img/${p.base.rols.toUpperCase()}.svg`}
                 className="h-[1vw] brightness-0 invert opacity-30 group-hover/row:opacity-60 transition-opacity"
