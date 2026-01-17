@@ -8,7 +8,10 @@ export default function TablaInteractiva({ jugadoresIniciales }: { jugadoresInic
   const [q, setQ] = useState("");
   const [rol, setRol] = useState("TODOS");
   const [ordenWR, setOrdenWR] = useState(false);
+  const [ordenGames, setOrdenGames] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (typeof document === "undefined") return;
@@ -21,7 +24,6 @@ export default function TablaInteractiva({ jugadoresIniciales }: { jugadoresInic
     return () => globalThis.removeEventListener("keydown", handleKey);
   }, []);
 
-  // Lógica de filtrado y orden
   let filtrados = jugadoresIniciales.filter((j: Jugador) => {
     const texto = q.toLowerCase().trim();
     const matchQ = !texto ||
@@ -31,18 +33,27 @@ export default function TablaInteractiva({ jugadoresIniciales }: { jugadoresInic
     return matchQ && matchRol;
   });
 
+  // 2. Lógica de ordenamiento
   if (ordenWR) {
     filtrados = [...filtrados].sort((a, b) => b.lol.wr - a.lol.wr);
+  } else if (ordenGames) {
+    filtrados = [...filtrados].sort((a, b) => {
+      const totalA = a.lol.victorias + a.lol.derrotas;
+      const totalB = b.lol.victorias + b.lol.derrotas;
+      return totalB - totalA;
+    });
   } else {
     filtrados = [...filtrados].sort((a, b) => a.lol.posicion - b.lol.posicion);
   }
 
   return (
     <div className="flex flex-col">
+      {/* 3.FilterBar */}
       <FilterBar
         q={q} setQ={setQ} inputRef={inputRef}
         rol={rol} setRol={setRol}
         ordenWR={ordenWR} setOrdenWR={setOrdenWR}
+        ordenGames={ordenGames} setOrdenGames={setOrdenGames}
       />
 
       <div className="relative z-10 overflow-hidden bg-transparent border-x border-b border-Blanco/30 rounded-b-[1.2vw]">
