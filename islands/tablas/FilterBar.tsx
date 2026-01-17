@@ -10,28 +10,32 @@ interface FilterBarProps {
   setRol: (val: string) => void;
   ordenWR: boolean;
   setOrdenWR: (val: boolean) => void;
+  ordenGames: boolean;
+  setOrdenGames: (val: boolean) => void;
   inputRef: RefObject<HTMLInputElement>;
 }
 
 const ROLES = ["TOP", "JG", "MID", "ADC", "SUP"];
 
 export default function FilterBar({
-  q, setQ, rol, setRol, ordenWR, setOrdenWR, inputRef
+  q, setQ, rol, setRol, ordenWR, setOrdenWR, ordenGames, setOrdenGames, inputRef
 }: FilterBarProps) {
   const [rolesExpandido, setRolesExpandido] = useState(false);
+
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setQ("");
         setRol("TODOS");
         setOrdenWR(false);
+        setOrdenGames(false);
         setRolesExpandido(false);
         inputRef.current?.blur();
       }
     };
     globalThis.addEventListener("keydown", handleEsc);
     return () => globalThis.removeEventListener("keydown", handleEsc);
-  }, [setQ, setRol, setOrdenWR, inputRef]);
+  }, [setQ, setRol, setOrdenWR, setOrdenGames, inputRef]);
 
   return (
     <div className="relative z-50 flex items-center justify-between gap-[1vw] bg-Azul/60 p-[1.5vw] rounded-t-[1.2vw] border-b border-Dorado/40 backdrop-blur-md">
@@ -64,7 +68,6 @@ export default function FilterBar({
             onInput={(e) => setQ(e.currentTarget.value)}
           />
 
-          {/* Icono Lupa */}
           <div className={`
             absolute top-1/2 -translate-y-1/2 pointer-events-none transition-all duration-500 text-Dorado z-10
             ${q
@@ -130,12 +133,29 @@ export default function FilterBar({
         {/* BOTÓN ORDENAR POR WR */}
         <button
           type="button"
-          onClick={() => setOrdenWR(!ordenWR)}
+          onClick={() => {
+            setOrdenWR(!ordenWR);
+            if (!ordenWR) setOrdenGames(false);
+          }}
           className={`h-[3vw] min-w-[3.5vw] px-[1vw] rounded-full text-[0.85vw] font-medium tracking-tighter transition-all duration-300 border ${
             ordenWR ? "bg-Dorado text-Azul border-Dorado shadow-[0_0_1vw_#C4A052]" : "bg-Azul/80 text-Blanco border-Blanco/30"
           }`}
         >
           WR
+        </button>
+
+        {/* BOTÓN ORDENAR POR GAMES */}
+        <button
+          type="button"
+          onClick={() => {
+            setOrdenGames(!ordenGames);
+            if (!ordenGames) setOrdenWR(false);
+          }}
+          className={`h-[3vw] min-w-[3.5vw] px-[1vw] rounded-full text-[0.85vw] font-medium tracking-tighter transition-all duration-300 border ${
+            ordenGames ? "bg-Dorado text-Azul border-Dorado shadow-[0_0_1vw_#C4A052]" : "bg-Azul/80 text-Blanco border-Blanco/30"
+          }`}
+        >
+          GAMES
         </button>
 
         {/* BOTÓN RESETEAR TODO */}
@@ -145,6 +165,7 @@ export default function FilterBar({
             setQ("");
             setRol("TODOS");
             setOrdenWR(false);
+            setOrdenGames(false);
             setRolesExpandido(false);
           }}
           className="bg-Azul/80 text-Dorado flex h-[3vw] w-[3vw] items-center justify-center rounded-full border border-Blanco/30 hover:rotate-180 transition-all duration-500 hover:border-Dorado group"
