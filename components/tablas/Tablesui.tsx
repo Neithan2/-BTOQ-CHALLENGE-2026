@@ -12,24 +12,28 @@ export const TRADUCIR_RANGO: Record<string, string> = {
   UNRANKED: " "
 };
 export const DICCIONARIO_NOMBRES: Record<string, string | string[]> = {
-  "Swordtoy": ["Espadita", "Femboy?"],
+  "Swordtoy": ["Espadita"],
   "Tommy": "Betomifornite2019",
+  "Betomin": ["Robomin","Benjamono"],
   "Luquetiii777": ["El Lechettis", "El DrToro"],
   "Reyshaquito": ["Los causas", "Shaquito"],
-  "Ayelencitapp": ["La Fraka", "La Pepona"],
-  "7sheckler": ["El Edater", "Busca Femboys"],
+  "Ayelencitapp": ["La Fraka :3", "La Pepona"],
+  "7sheckler": ["Chicle", "Sener"],
 };
 
 export const getWRStyles = (wr: number) => {
-  if (isNaN(wr)) return "text-Blanco/70";
-  if (wr >= 61) return "text-Dorado";
-  if (wr >= 56) return "text-[#a2ffb3]";
-  if (wr >= 52) return "text-[#26de81]";
-  if (wr >= 49) return "text-[#d1d8e0]";
-  if (wr >= 45) return "text-[#fd9644]";
-  return "text-red-500";
-};
+  if (isNaN(wr)) return "text-[#F4F4F4]";
 
+  if (wr >= 90) return "text-[#c1fff1]";
+  if (wr >= 75) return "text-[#A5D6A7]";
+  if (wr >= 56) return "text-[#b3b38a]";
+  if (wr >= 52) return "text-[#c1ccdb]";
+  if (wr >= 49) return "text-[#94A3B8]";
+  if (wr >= 45) return "text-[#efa94a]";
+  if (wr >= 30) return "text-[#D38345]";
+
+  return "text-[#b81414]";
+};
 export const UI = {
   wrapper: (customClass = "") => `
     w-full max-w-[80vw] mx-auto mb-[10vh] relative px-[2vw] py-[3vw] group
