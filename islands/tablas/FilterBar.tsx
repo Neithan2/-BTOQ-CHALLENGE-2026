@@ -1,91 +1,177 @@
-import { useState, useEffect, useRef } from "preact/hooks";
-import { Jugador } from "@/utils/datos.ts";
-import { PlayerRow } from "@/components/tablas/PlayerRow.tsx";
-import { Th } from "@/components/tablas/Tablesui.tsx";
-import FilterBar from "@/islands/tablas/FilterBar.tsx";
+// islands/tablas/FilterBar.tsx
+import { SearchIcon } from "@/components/tablas/Tablesui.tsx";
+import { useState, useEffect } from "preact/hooks";
+import { RefObject } from "preact";
 
-export default function TablaInteractiva({ jugadoresIniciales }: { jugadoresIniciales: Jugador[] }) {
-  const [q, setQ] = useState("");
-  const [rol, setRol] = useState("TODOS");
-  const [ordenWR, setOrdenWR] = useState(false);
-  const [ordenGames, setOrdenGames] = useState(false);
+interface FilterBarProps {
+  q: string;
+  setQ: (val: string) => void;
+  rol: string;
+  setRol: (val: string) => void;
+  ordenWR: boolean;
+  setOrdenWR: (val: boolean) => void;
+  ordenGames: boolean;
+  setOrdenGames: (val: boolean) => void;
+  inputRef: RefObject<HTMLInputElement>;
+}
 
-  const inputRef = useRef<HTMLInputElement>(null);
+const ROLES = ["TOP", "JG", "MID", "ADC", "SUP"];
+
+export default function FilterBar({
+  q, setQ, rol, setRol, ordenWR, setOrdenWR, ordenGames, setOrdenGames, inputRef
+}: FilterBarProps) {
+  const [rolesExpandido, setRolesExpandido] = useState(false);
 
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (typeof document === "undefined") return;
-      if (e.key === "/" && document.activeElement?.tagName !== "INPUT") {
-        e.preventDefault();
-        inputRef.current?.focus();
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setQ("");
+        setRol("TODOS");
+        setOrdenWR(false);
+        setOrdenGames(false);
+        setRolesExpandido(false);
+        inputRef.current?.blur();
       }
     };
-    globalThis.addEventListener("keydown", handleKey);
-    return () => globalThis.removeEventListener("keydown", handleKey);
-  }, []);
-
-  let filtrados = jugadoresIniciales.filter((j: Jugador) => {
-    const texto = q.toLowerCase().trim();
-    const matchQ = !texto ||
-                  j.base.jugador.toLowerCase().includes(texto) ||
-                  j.base.invocador.toLowerCase().includes(texto);
-    const matchRol = rol === "TODOS" || j.base.rol.toUpperCase() === rol.toUpperCase();
-    return matchQ && matchRol;
-  });
-
-  // 2. Lógica de ordenamiento
-  if (ordenWR) {
-    filtrados = [...filtrados].sort((a, b) => b.lol.wr - a.lol.wr);
-  } else if (ordenGames) {
-    filtrados = [...filtrados].sort((a, b) => {
-      const totalA = a.lol.victorias + a.lol.derrotas;
-      const totalB = b.lol.victorias + b.lol.derrotas;
-      return totalB - totalA;
-    });
-  } else {
-    filtrados = [...filtrados].sort((a, b) => a.lol.posicion - b.lol.posicion);
-  }
+    globalThis.addEventListener("keydown", handleEsc);
+    return () => globalThis.removeEventListener("keydown", handleEsc);
+  }, [setQ, setRol, setOrdenWR, setOrdenGames, inputRef]);
 
   return (
-    <div className="flex flex-col">
-      {/* 3.FilterBar */}
-      <FilterBar
-        q={q} setQ={setQ} inputRef={inputRef}
-        rol={rol} setRol={setRol}
-        ordenWR={ordenWR} setOrdenWR={setOrdenWR}
-        ordenGames={ordenGames} setOrdenGames={setOrdenGames}
-      />
+    <div className="relative z-50 flex items-center justify-between gap-[1vw] bg-Azul/60 p-[1.5vw] rounded-t-[1.2vw] border-b border-Dorado/40 backdrop-blur-md">
 
-      <div className="relative z-10 overflow-hidden bg-transparent border-x border-b border-Blanco/30 rounded-b-[1.2vw]">
-        <table className="w-full border-collapse table-fixed">
-          <thead>
-            <tr className="bg-Azul/80 text-Dorado">
-              <Th className="w-[3vw] pl-[3.4vw] text-left text-[1.04vw]">#</Th>
-              <Th className="w-[17%] px-[0.5vw] text-left">Jugador</Th>
-              <Th className="w-[18%] px-[0.5vw] text-left">Cuenta</Th>
-              <Th className="w-[2.5vw] text-center">Rol</Th>
-              <Th className="w-[7vw] text-center">Estado</Th>
-              <Th className="w-[4vw] text-center">V/D</Th>
-              <Th className="w-[4vw] text-center">WR</Th>
-              <Th className="w-[4vw] text-center">Rango</Th>
-              <Th className="w-[1.5vw] text-center">LP</Th>
-              <Th className="w-[5vw] text-center"></Th>
-            </tr>
-          </thead>
-          <tbody className="font-medium raleway text-Blanco">
-            {filtrados.length > 0 ? (
-              filtrados.map((p: Jugador) => (
-                <PlayerRow key={p.id} p={p} index={p.lol.posicion - 1} />
-              ))
-            ) : (
-              <tr>
-                <td colSpan={10} className="py-[10vh] text-center text-Blanco/60 italic bg-Negro/20">
-                  No se encontraron jugadores que coincidan con la búsqueda.
-                </td>
-              </tr>
+      {/* 1. BUSCADOR ANIMADO */}
+      <div className="flex items-center min-w-0">
+        <div className={`relative flex items-center group transition-all duration-500 ease-in-out h-[3vw] ${
+          q ? "w-[25vw]" : "w-[3vw] focus-within:w-[35vw]"
+        }`}>
+          <input
+            ref={inputRef}
+            type="text"
+            id="search-player"
+            name="search-player"
+            aria-label="Buscar jugador"
+            autoComplete="off"
+            spellcheck={false}
+            onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
+            placeholder="BUSCAR JUGADOR...(ESC and /)"
+            className={`
+              block w-full h-full bg-Azul/90 border rounded-full outline-none
+              text-[0.9vw] text-Blanco transition-all duration-500
+              placeholder:text-transparent focus:placeholder:text-Blanco/30
+              ${q
+                ? "border-Dorado shadow-[0_0_1vw_rgba(196,160,82,0.3)] pl-[3vw] pr-[1.5vw]"
+                : "border-Blanco/20 focus:border-Dorado focus:pl-[3vw] focus:pr-[1.5vw]"
+              }
+            `}
+            value={q}
+            onInput={(e) => setQ(e.currentTarget.value)}
+          />
+
+          <div className={`
+            absolute top-1/2 -translate-y-1/2 pointer-events-none transition-all duration-500 text-Dorado z-10
+            ${q
+              ? "left-[1vw] translate-x-0 opacity-100"
+              : "left-1/2 -translate-x-1/2 opacity-70 group-focus-within:left-[1vw] group-focus-within:translate-x-0 group-focus-within:opacity-100"
+            }
+          `}>
+            <div className="w-[1.2vw] h-[1.2vw]">
+              <SearchIcon />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. CONTROLES DE FILTRO Y ORDEN */}
+      <div className="flex items-center gap-[0.8vw] shrink-0">
+
+        {/* SELECTOR DE ROLES */}
+        <div className={`bg-Azul/80 relative flex h-[3vw] items-center rounded-full border transition-all duration-500 ease-out ${
+          rolesExpandido ? "border-Dorado w-[18vw]" : "w-[3vw] justify-center border-Blanco/30"
+        }`}>
+          <button
+            type="button"
+            onClick={() => setRolesExpandido(!rolesExpandido)}
+            className="absolute left-0 z-10 flex h-[2.8vw] w-[2.8vw] items-center justify-center rounded-full"
+          >
+            {rolesExpandido ? <span className="text-Dorado text-[1vw] font-black">✕</span> : (
+              <img
+                src={`/img/${(!rol || rol === "TODOS") ? "ALL" : rol.toUpperCase()}.svg`}
+                className="h-[1.4vw] w-[1.4vw] brightness-0 invert opacity-90"
+                alt="Filtro"
+                draggable={false}
+              />
             )}
-          </tbody>
-        </table>
+          </button>
+
+          <div className={`ml-[3vw] flex w-full items-center justify-around transition-opacity duration-300 ${
+            rolesExpandido ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}>
+            {["TODOS", ...ROLES].map((r) => (
+              <button
+                key={r}
+                type="button"
+                onClick={() => {
+                  setRol(r);
+                  setRolesExpandido(false);
+                }}
+                className={`transition-all hover:scale-125 ${
+                  (rol === r) || (r === 'TODOS' && (!rol || rol === "TODOS")) ? "opacity-100 scale-110" : "opacity-40"
+                }`}
+              >
+                <img
+                  src={`/img/${r === "TODOS" ? "ALL" : r.toUpperCase()}.svg`}
+                  className="h-[1.2vw] w-[1.2vw] brightness-0 invert"
+                  alt={r}
+                  draggable={false}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* BOTÓN ORDENAR POR WR */}
+        <button
+          type="button"
+          onClick={() => {
+            setOrdenWR(!ordenWR);
+            if (!ordenWR) setOrdenGames(false);
+          }}
+          className={`h-[3vw] min-w-[3.5vw] px-[1vw] rounded-full text-[0.85vw] font-medium tracking-tighter transition-all duration-300 border ${
+            ordenWR ? "bg-Dorado text-Azul border-Dorado shadow-[0_0_1vw_#C4A052]" : "bg-Azul/80 text-Blanco border-Blanco/30"
+          }`}
+        >
+          WR
+        </button>
+
+        {/* BOTÓN ORDENAR POR GAMES */}
+        <button
+          type="button"
+          onClick={() => {
+            setOrdenGames(!ordenGames);
+            if (!ordenGames) setOrdenWR(false);
+          }}
+          className={`h-[3vw] min-w-[3.5vw] px-[1vw] rounded-full text-[0.85vw] font-medium tracking-tighter transition-all duration-300 border ${
+            ordenGames ? "bg-Dorado text-Azul border-Dorado shadow-[0_0_1vw_#C4A052]" : "bg-Azul/80 text-Blanco border-Blanco/30"
+          }`}
+        >
+          GAMES
+        </button>
+
+        {/* BOTÓN RESETEAR TODO */}
+        <button
+          type="button"
+          onClick={() => {
+            setQ("");
+            setRol("TODOS");
+            setOrdenWR(false);
+            setOrdenGames(false);
+            setRolesExpandido(false);
+          }}
+          className="bg-Azul/80 text-Dorado flex h-[3vw] w-[3vw] items-center justify-center rounded-full border border-Blanco/30 hover:rotate-180 transition-all duration-500 hover:border-Dorado group"
+        >
+          <span className="text-[1.2vw] leading-none group-hover:scale-110">↺</span>
+        </button>
       </div>
     </div>
   );
